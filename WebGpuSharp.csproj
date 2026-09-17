@@ -67,6 +67,7 @@
             <Visible>False</Visible>
             <Pack>true</Pack>
         </Content>
+        
         <!-- macOS x64 native library -->
         <Content Include="runtimes/osx-x64/native/webgpu_dawn.dylib" Condition="Exists('runtimes/osx-x64/native/webgpu_dawn.dylib')">
             <PackagePath>runtimes/osx-x64/native</PackagePath>
@@ -79,6 +80,7 @@
             <Visible>False</Visible>
             <Pack>true</Pack>
         </Content>
+        
         <!-- Linux x64 native library -->
         <Content Include="runtimes/linux-x64/native/webgpu_dawn.so" Condition="Exists('runtimes/linux-x64/native/webgpu_dawn.so')">
             <PackagePath>runtimes/linux-x64/native</PackagePath>
@@ -91,6 +93,20 @@
             <Visible>False</Visible>
             <Pack>true</Pack>
         </Content>
+
+        <!-- Android x64 native library -->
+        <Content Include="runtimes/android-x64/native/webgpu_dawn.so" Condition="Exists('runtimes/android-x64/native/webgpu_dawn.so')">
+            <PackagePath>runtimes/android-x64/native</PackagePath>
+            <Visible>False</Visible>
+            <Pack>true</Pack>
+        </Content>
+        <!-- Android ARM64 native library -->
+        <Content Include="runtimes/android-arm64/native/webgpu_dawn.so" Condition="Exists('runtimes/android-arm64/native/webgpu_dawn.so')">
+            <PackagePath>runtimes/android-arm64/native</PackagePath>
+            <Visible>False</Visible>
+            <Pack>true</Pack>
+        </Content>
+
         <!-- Keep the current one for local development -->
         <None Condition="'$(_WebGpuSharp_NativeRuntime)' != ''" Include="runtimes/$(_WebGpuSharp_NativeRuntime)/native/$(_WebGpuSharp_NativeLibName)">
             <Link>%(Filename)%(Extension)</Link>
@@ -99,5 +115,9 @@
             <Pack>false</Pack>
         </None>
         <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="runtimes\android-arm64\native\" />
+      <Folder Include="runtimes\android-x64\native\" />
     </ItemGroup>
 </Project>
