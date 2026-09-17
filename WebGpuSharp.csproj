@@ -114,7 +114,7 @@
             <Visible>true</Visible>
             <Pack>false</Pack>
         </None>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="runtimes\android-x64\native\" />
