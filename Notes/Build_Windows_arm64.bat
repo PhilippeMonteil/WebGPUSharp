@@ -1,5 +1,5 @@
 d:
-cd d:repos\dawn
+cd d:\repos\dawn
 
 rmdir /S /Q out\win-arm64
 

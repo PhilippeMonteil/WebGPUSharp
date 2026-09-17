@@ -45,6 +45,6 @@ d:
 cd D:\Repos\dawn\out\android-arm64\src\dawn\native
 dir libwebgpu_dawn.so
 llvm-strip --strip-all D:\Repos\dawn\out\android-arm64\src\dawn\native\libwebgpu_dawn.so -o D:\Repos\dawn\out\android-arm64\src\dawn\native\webgpu_dawn.so 
-dir libwebgpu_dawn.so
+dir webgpu_dawn.so
 cd D:\Repos\dawn
 pause
