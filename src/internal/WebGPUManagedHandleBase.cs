@@ -5,7 +5,8 @@ namespace WebGpuSharp.Internal;
 
 public abstract class WebGPUManagedHandleBase<THandle> :
     IEquatable<WebGPUManagedHandleBase<THandle>>,
-    IEquatable<THandle>
+    IEquatable<THandle>,
+    IDisposable
     where THandle : unmanaged, IEquatable<THandle>, IWebGpuHandle<THandle>
 {
     private readonly WebGpuSafeHandle<THandle> _safeHandle;
@@ -15,6 +16,30 @@ public abstract class WebGPUManagedHandleBase<THandle> :
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => _safeHandle.Handle;
     }
+
+    #region --- IDisposable
+
+    int m_disposed;
+
+    void dispose(bool disposing)
+    {
+        int _disposed = Interlocked.CompareExchange(ref m_disposed, 1, 0);
+        if (_disposed != 0) return;
+        _safeHandle?.Dispose();
+    }
+
+    ~WebGPUManagedHandleBase()
+    {
+        dispose(false);
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        dispose(true);
+    }
+
+    #endregion
 
     protected WebGPUManagedHandleBase(THandle handle)
     {
