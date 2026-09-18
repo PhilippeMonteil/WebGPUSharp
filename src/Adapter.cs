@@ -393,7 +393,7 @@ file static class DeviceLostFunctions
     {
         try
         {
-            var callback = (Action<DeviceHandle, DeviceLostReason, ReadOnlySpan<byte>>?)ConsumeUserDataIntoObject(userdata);
+            var callback = ConsumeUserDataIntoObject(userdata) as Action<DeviceHandle, DeviceLostReason, ReadOnlySpan<byte>>;
 
             if (callback == null)
             {
@@ -434,7 +434,7 @@ file static class DeviceErrorFunctions
     {
         try
         {
-            var callback = (Action<DeviceHandle, ErrorType, ReadOnlySpan<byte>>?)GetObjectFromUserData(userdata);
+            var callback = GetObjectFromUserData(userdata) as Action<DeviceHandle, ErrorType, ReadOnlySpan<byte>>;
 
             if (callback == null)
             {
