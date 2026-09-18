@@ -1,5 +1,9 @@
 # WebGpuSharp
 
+## github
+
+https://github.com/PhilippeMonteil/WebGPUSharp
+
 ## WebGPU_FFI
 
 Projection C# des points d'entrée de l'API WebGPU

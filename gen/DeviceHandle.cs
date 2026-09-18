@@ -88,7 +88,7 @@ public unsafe partial struct DeviceHandle : IEquatable<DeviceHandle>
     /// Returns the hash code for this instance.
     /// </summary>
     public override int GetHashCode() => _ptr.GetHashCode();
-+
+
     /// <summary>
     /// Creates a BindGroup.
     /// </summary>

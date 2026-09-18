@@ -38,7 +38,7 @@
         <_WebGpuSharp_NativeLibName Condition="'$(_WebGpuSharp_NativeRuntime)' == 'linux-arm64'">webgpu_dawn.so</_WebGpuSharp_NativeLibName>
         <!-- Package Information -->
         <PackageId>WebGPUSharp</PackageId>
-        <Version>0.4.3</Version>
+        <Version>0.7.0</Version>
         <Authors>Emil Vad</Authors>
         <Description>A C# wrapper for WebGPU</Description>
         <PackageTags>webgpu;graphics;gpu</PackageTags>
