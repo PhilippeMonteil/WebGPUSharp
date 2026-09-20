@@ -10,6 +10,26 @@ xcodebuild -create-xcframework \
   -library simulator/libdawn_merged.a   -headers include \
   -output Dawn.xcframework
   
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+
+rm -rf ./Dawn.xcframeworks/Dawn.iOS.xcframework
+
+xcodebuild -create-xcframework \
+  -library /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a -headers include \
+  -library /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a -headers include \
+  -output ./Dawn.xcframeworks/Dawn.iOS.xcframework
+
+//
+// macos : xcframework
+//
+
+rm -rf ./Dawn.xcframeworks/Dawn.macOS.xcframework
+
+xcodebuild -create-xcframework \
+  -library /Users/philippemonteil/RiderProjects/dawn/build_macos/src/dawn/native/Release/libdawn_native.a -headers include \
+  -output ./Dawn.xcframeworks/Dawn.macOS.xcframework
+
 //
 // macos
 //
@@ -62,7 +82,7 @@ find . -name "libdawn_native.*"
 //
 // iphoneos arm64
 //
-
+// - TINT_BUILD_WGSL_READER=ON, TINT_BUILD_WGSL_WRITER=ON : incluent Tint dans les .a produits
 rm -rf build_ios_device
 
 cmake -B build_ios_device -G Xcode \
@@ -105,6 +125,8 @@ cmake -B build_ios_device -G Xcode \
 cmake --build build_ios_device --config Release
 
 find . -name "libdawn_native.a"
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
 
 //
 // iphoneos similator
@@ -153,6 +175,7 @@ cmake --build build_ios_simulator --config Release
 
 find . -name "libdawn_native.a"
 
-/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
-
+./build/dawn_native.build/Release-iphonesimulator/Objects-normal/arm64/Binary/libdawn_native.a
+./build/dawn_native.build/Release-iphonesimulator/Objects-normal/x86_64/Binary/libdawn_native.a
+./src/dawn/native/Release-iphonesimulator/libdawn_native.a
 
