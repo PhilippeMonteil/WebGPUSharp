@@ -1,5 +1,38 @@
 
-// 20/09/2026 18:22
+// 20/09/2026 18:35
+
+// Reference the native library / iOS
+
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <NativeReference Include="../native/Dawn.xcframework">
+    <Kind>Static</Kind>
+    <ForceLoad>True</ForceLoad>
+    <SmartLink>False</SmartLink>
+    <Frameworks>Metal MetalKit QuartzCore Foundation</Frameworks>
+    <LinkerFlags>-lc++</LinkerFlags>
+  </NativeReference>
+</ItemGroup>
+
+ForceLoad is what stops the linker discarding Dawn's object files since nothing in managed code visibly calls them at link time. 
+-lc++ is needed because Dawn is C++ under the hood even though webgpu.h is a plain C surface. 
+Since your archive is static, there's no code-signing step at all — it links straight into the app binary.
+
+// Bind the C API / iOS
+
+Static libs resolve through __Internal:
+
+using System.Runtime.InteropServices;
+
+internal static partial class Dawn
+{
+    const string Lib = "__Internal";
+
+    [LibraryImport(Lib, EntryPoint = "wgpuCreateInstance")]
+    internal static partial IntPtr CreateInstance(IntPtr descriptor);
+
+    [LibraryImport(Lib, EntryPoint = "wgpuInstanceRelease")]
+    internal static partial void InstanceRelease(IntPtr instance);
+}
 
 //
 // ios : xcframework
