@@ -1,10 +1,17 @@
 
-rm -rf build_ios_device
+// iphoneos arm64
+// rm -rf build_ios_device
+// cmake -B build_ios_device -G Xcode \
+//  -DCMAKE_OSX_SYSROOT=iphoneos \
+//  -DCMAKE_OSX_ARCHITECTURES=arm64 \
+// cmake --build build_ios_device --config Release
 
-cmake -B build_ios_device -G Xcode \
+rm -rf build_ios_simulator
+
+cmake -B build_ios_simulator -G Xcode \
   -DCMAKE_SYSTEM_NAME=iOS \
-  -DCMAKE_OSX_SYSROOT=iphoneos \
-  -DCMAKE_OSX_ARCHITECTURES=arm64 \
+  -DCMAKE_OSX_SYSROOT=iphonesimulator \
+  -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
   -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
   -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
   -DDAWN_FETCH_DEPENDENCIES=ON \
@@ -21,8 +28,13 @@ cmake -B build_ios_device -G Xcode \
   -DDAWN_BUILD_SAMPLES=OFF \
   -DDAWN_BUILD_TESTS=OFF \
   -DDAWN_BUILD_NODE_BINDINGS=OFF \
+  -DDAWN_BUILD_PROTOBUF=OFF \
   -DDAWN_ENABLE_INSTALL=ON \
   -DDAWN_BUILD_MONOLITHIC_LIBRARY=STATIC \
+  -DDAWN_BUILD_PROTOBUF=OFF \
+  -DTINT_BUILD_FUZZERS=OFF \
+  -DTINT_BUILD_BENCHMARKS=OFF \
+  -DTINT_BUILD_IR_BINARY=OFF \ 
   -DTINT_BUILD_CMD_TOOLS=OFF \
   -DTINT_BUILD_TESTS=OFF \
   -DTINT_BUILD_SPV_READER=OFF \
@@ -33,4 +45,9 @@ cmake -B build_ios_device -G Xcode \
   -DTINT_BUILD_WGSL_READER=ON \
   -DTINT_BUILD_WGSL_WRITER=ON
 
-cmake --build build_ios_device --config Release
+cmake --build build_ios_simulator --config Release
+
+find . -name "libdawn_native.a"
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+
