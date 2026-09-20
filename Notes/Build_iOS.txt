@@ -2,6 +2,15 @@
 // 20/09/2026 14:15
 
 //
+// ios : xcframework
+//
+
+xcodebuild -create-xcframework \
+  -library device/libdawn_merged.a      -headers include \
+  -library simulator/libdawn_merged.a   -headers include \
+  -output Dawn.xcframework
+  
+//
 // macos
 //
 
