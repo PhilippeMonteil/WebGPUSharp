@@ -1,5 +1,5 @@
 
-// 20/09/2026 18:35
+// 21/09/2026 11:14
 
 // Reference the native library / iOS
 
@@ -47,79 +47,19 @@ xcodebuild -create-xcframework \
   -headers /Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers \
   -output /Users/philippemonteil/RiderProjects/dawn/Dawn.xcframeworks/Dawn.iOS.xcframework
 
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/gen/webgpu-headers/webgpu.h
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers/webgpu.h
+
+
 nm -gU /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
 objdump --syms /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
 
 //
-// macos : xcframework
-//
-
-rm -rf ./Dawn.xcframeworks/Dawn.macOS.xcframework
-
-xcodebuild -create-xcframework \
-  -library /Users/philippemonteil/RiderProjects/dawn/build_macos/src/dawn/native/Release/libdawn_native.a \
-  -headers /Users/philippemonteil/RiderProjects/dawn/build_macos/gen/webgpu-headers/webgpu.h \
-  -output ./Dawn.xcframeworks/Dawn.macOS.xcframework
-
-./build_macos/gen/webgpu-headers/webgpu.h
-
-//
-// macos
-//
-
-rm -rf build_macos
-
-cmake -B build_macos -G Xcode \
-  -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
-  -DCMAKE_OSX_DEPLOYMENT_TARGET=12.0 \
-  -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
-  -DDAWN_FETCH_DEPENDENCIES=ON \
-  -DDAWN_ENABLE_METAL=ON \
-  -DDAWN_ENABLE_VULKAN=OFF \
-  -DDAWN_ENABLE_D3D11=OFF \
-  -DDAWN_ENABLE_D3D12=OFF \
-  -DDAWN_ENABLE_DESKTOP_GL=OFF \
-  -DDAWN_ENABLE_OPENGLES=OFF \
-  -DDAWN_ENABLE_NULL=OFF \
-  -DDAWN_USE_GLFW=OFF \
-  -DDAWN_USE_X11=OFF \
-  -DDAWN_USE_WAYLAND=OFF \
-  -DDAWN_BUILD_SAMPLES=OFF \
-  -DDAWN_BUILD_TESTS=OFF \
-  -DDAWN_BUILD_NODE_BINDINGS=OFF \
-  -DDAWN_BUILD_PROTOBUF=OFF \
-  -DDAWN_ENABLE_INSTALL=ON \
-  -DDAWN_BUILD_MONOLITHIC_LIBRARY=SHARED \
-  -DDAWN_BUILD_PROTOBUF=OFF \
-  -DTINT_BUILD_FUZZERS=OFF \
-  -DTINT_BUILD_BENCHMARKS=OFF \
-  -DTINT_BUILD_IR_BINARY=OFF \ 
-  -DTINT_BUILD_CMD_TOOLS=OFF \
-  -DTINT_BUILD_TESTS=OFF \
-  -DTINT_BUILD_SPV_READER=OFF \
-  -DTINT_BUILD_SPV_WRITER=OFF \
-  -DTINT_BUILD_GLSL_WRITER=OFF \
-  -DTINT_BUILD_HLSL_WRITER=OFF \
-  -DTINT_BUILD_MSL_WRITER=ON \
-  -DTINT_BUILD_WGSL_READER=ON \
-  -DTINT_BUILD_WGSL_WRITER=ON
-
-cmake --build build_macos --config Release
-
-find . -name "libdawn_native.*"
-
-./build_macos/build/dawn_native.build/Release/Objects-normal/arm64/Binary/libdawn_native.a // 6 Mb
-./build_macos/build/dawn_native.build/Release/Objects-normal/x86_64/Binary/libdawn_native.a // 6 Mb
-./build_macos/src/dawn/native/Release/libdawn_native.a // 12 Mb
-
-find . -name "webgpu.h"
-
-./build_macos/gen/webgpu-headers/webgpu.h
-
-//
 // iphoneos arm64
 //
-// - TINT_BUILD_WGSL_READER=ON, TINT_BUILD_WGSL_WRITER=ON : incluent Tint dans les .a produits
 rm -rf build_ios_device
 
 cmake -B build_ios_device -G Xcode \
@@ -162,8 +102,6 @@ cmake -B build_ios_device -G Xcode \
 cmake --build build_ios_device --config Release
 
 find . -name "libdawn_native.a"
-
-/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
 
 //
 // iphoneos similator
@@ -210,13 +148,20 @@ cmake -B build_ios_simulator -G Xcode \
 
 cmake --build build_ios_simulator --config Release
 
-find . -name "libdawn_native.a"
-
-./build/dawn_native.build/Release-iphonesimulator/Objects-normal/arm64/Binary/libdawn_native.a
-./build/dawn_native.build/Release-iphonesimulator/Objects-normal/x86_64/Binary/libdawn_native.a
-./src/dawn/native/Release-iphonesimulator/libdawn_native.a
-
 find . -name "webgpu.h"
 
-./build_ios_simulator/gen/webgpu-headers/webgpu.h
-./build_ios_device/gen/webgpu-headers/webgpu.h
+/Users/philippemonteil/RiderProjects/dawn
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/gen/webgpu-headers/webgpu.h
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers/webgpu.h
+
+find . -name "libdawn_native.a"
+
+/Users/philippemonteil/RiderProjects/dawn
+
+./build_ios_simulator/build/dawn_native.build/Release-iphonesimulator/Objects-normal/arm64/Binary/libdawn_native.a
+./build_ios_simulator/build/dawn_native.build/Release-iphonesimulator/Objects-normal/x86_64/Binary/libdawn_native.a
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+
