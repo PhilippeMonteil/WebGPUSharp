@@ -165,3 +165,22 @@ find . -name "libdawn_*.a"
     </NativeReference>
 
 </ItemGroup>
+
+<ItemGroup Condition="'$(TargetFramework.Contains(-ios))' and '$(RuntimeIdentifier)' == 'ios-arm64'">
+
+    <!-- Frameworks Apple requis pour Dawn Native -->
+    <NativeReference Include="Platforms\iOS\libs\ios-arm64\libdawn_native.a" Kind="Static" SmartLink="True">
+        <!-- On injecte ici les dépendances matérielles d'iOS exigées par Dawn -->
+        <Frameworks>Metal QuartzCore Foundation CoreGraphics CoreFoundation</Frameworks>
+    </NativeReference>
+
+    <!-- Les autres briques de Dawn -->
+    <NativeReference Include="Platforms\iOS\libs\ios-arm64\libdawn_proc.a" Kind="Static" SmartLink="True" />
+    <NativeReference Include="Platforms\iOS\libs\ios-arm64\libdawn_platform.a" Kind="Static" SmartLink="True" />
+    <NativeReference Include="Platforms\iOS\libs\ios-arm64\libdawn_common.a" Kind="Static" SmartLink="True" />
+    
+    <!-- Ne pas oublier Tint (générateur de Shaders indispensable à Dawn) -->
+    <NativeReference Include="Platforms\iOS\libs\ios-arm64\libtint.a" Kind="Static" SmartLink="True" />
+
+</ItemGroup>
+
