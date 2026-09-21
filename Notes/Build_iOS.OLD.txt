@@ -1,0 +1,201 @@
+
+// 21/09/2026 15:59
+
+find . -name "*.a"
+
+nm -m libwebgpu_dawn.a | grep -i wgpuCreateInstance
+nm -m Dawn.xcframework/ios-arm64/libdawn_merged.a | grep -E 'external _wgpu(CreateInstance|InstanceRequestAdapter)'
+
+// Reference the native library / iOS
+
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <NativeReference Include="../native/Dawn.xcframework">
+    <Kind>Static</Kind>
+    <ForceLoad>True</ForceLoad>
+    <SmartLink>False</SmartLink>
+    <Frameworks>Metal MetalKit QuartzCore Foundation</Frameworks>
+    <LinkerFlags>-lc++</LinkerFlags>
+  </NativeReference>
+</ItemGroup>
+
+ForceLoad is what stops the linker discarding Dawn's object files since nothing in managed code visibly calls them at link time. 
+-lc++ is needed because Dawn is C++ under the hood even though webgpu.h is a plain C surface. 
+Since your archive is static, there's no code-signing step at all — it links straight into the app binary.
+
+// Bind the C API / iOS
+
+Static libs resolve through __Internal:
+
+using System.Runtime.InteropServices;
+
+internal static partial class Dawn
+{
+    const string Lib = "__Internal";
+
+    [LibraryImport(Lib, EntryPoint = "wgpuCreateInstance")]
+    internal static partial IntPtr CreateInstance(IntPtr descriptor);
+
+    [LibraryImport(Lib, EntryPoint = "wgpuInstanceRelease")]
+    internal static partial void InstanceRelease(IntPtr instance);
+}
+
+//
+// ios : xcframework
+//
+
+rm -rf /Users/philippemonteil/RiderProjects/dawn/Dawn.xcframeworks/Dawn.iOS.xcframework
+
+xcodebuild -create-xcframework \
+  -library /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_combined.a \
+  -headers /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/gen/webgpu-headers \
+  -library /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_combined.a \
+  -headers /Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers \
+  -output /Users/philippemonteil/RiderProjects/dawn/Dawn.xcframeworks/Dawn.iOS.xcframework
+
+find . -name "libdawn_proc.a"
+
+nm -m /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/Release-iphonesimulator/libdawn_proc.a | grep -i wgpuCreateInstance
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/Release-iphonesimulator/libdawn_proc.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/gen/webgpu-headers/webgpu.h
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/Release-iphoneos/libdawn_proc.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers/webgpu.h
+
+libtool -static \
+  -o /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_combined.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/Release-iphoneos/libdawn_proc.a
+
+libtool -static \
+  -o /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_combined.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/Release-iphonesimulator/libdawn_proc.a
+  
+  
+  
+nm -gU /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+objdump --syms /Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+
+//
+// iphoneos arm64
+//
+rm -rf build_ios_device
+
+cmake -B build_ios_device -G Xcode \
+  -DCMAKE_SYSTEM_NAME=iOS \
+  -DCMAKE_OSX_SYSROOT=iphoneos \
+  -DCMAKE_OSX_ARCHITECTURES=arm64 \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+  -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
+  -DDAWN_FETCH_DEPENDENCIES=ON \
+  -DDAWN_ENABLE_METAL=ON \
+  -DDAWN_ENABLE_VULKAN=OFF \
+  -DDAWN_ENABLE_D3D11=OFF \
+  -DDAWN_ENABLE_D3D12=OFF \
+  -DDAWN_ENABLE_DESKTOP_GL=OFF \
+  -DDAWN_ENABLE_OPENGLES=OFF \
+  -DDAWN_ENABLE_NULL=OFF \
+  -DDAWN_USE_GLFW=OFF \
+  -DDAWN_USE_X11=OFF \
+  -DDAWN_USE_WAYLAND=OFF \
+  -DDAWN_BUILD_SAMPLES=OFF \
+  -DDAWN_BUILD_TESTS=OFF \
+  -DDAWN_BUILD_NODE_BINDINGS=OFF \
+  -DDAWN_BUILD_PROTOBUF=OFF \
+  -DDAWN_ENABLE_INSTALL=ON \
+  -DDAWN_BUILD_MONOLITHIC_LIBRARY=STATIC \
+  -DDAWN_BUILD_PROTOBUF=OFF \
+  -DTINT_BUILD_FUZZERS=OFF \
+  -DTINT_BUILD_BENCHMARKS=OFF \
+  -DTINT_BUILD_IR_BINARY=OFF \ 
+  -DTINT_BUILD_CMD_TOOLS=OFF \
+  -DTINT_BUILD_TESTS=OFF \
+  -DTINT_BUILD_SPV_READER=OFF \
+  -DTINT_BUILD_SPV_WRITER=OFF \
+  -DTINT_BUILD_GLSL_WRITER=OFF \
+  -DTINT_BUILD_HLSL_WRITER=OFF \
+  -DTINT_BUILD_MSL_WRITER=ON \
+  -DTINT_BUILD_WGSL_READER=ON \
+  -DTINT_BUILD_WGSL_WRITER=ON
+
+cmake --build build_ios_device --config Release --parallel
+
+libtool -static \
+  -o /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_combined.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/Release-iphoneos/libdawn_proc.a
+
+find . -name "libdawn_combined.a"
+find . -name "libdawn_native.a"
+find . -name "libdawn_proc.a"
+
+//
+// iphoneos similator
+//
+
+rm -rf build_ios_simulator
+
+cmake -B build_ios_simulator -G Xcode \
+  -DCMAKE_SYSTEM_NAME=iOS \
+  -DCMAKE_OSX_SYSROOT=iphonesimulator \
+  -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+  -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
+  -DDAWN_FETCH_DEPENDENCIES=ON \
+  -DDAWN_ENABLE_METAL=ON \
+  -DDAWN_ENABLE_VULKAN=OFF \
+  -DDAWN_ENABLE_D3D11=OFF \
+  -DDAWN_ENABLE_D3D12=OFF \
+  -DDAWN_ENABLE_DESKTOP_GL=OFF \
+  -DDAWN_ENABLE_OPENGLES=OFF \
+  -DDAWN_ENABLE_NULL=OFF \
+  -DDAWN_USE_GLFW=OFF \
+  -DDAWN_USE_X11=OFF \
+  -DDAWN_USE_WAYLAND=OFF \
+  -DDAWN_BUILD_SAMPLES=OFF \
+  -DDAWN_BUILD_TESTS=OFF \
+  -DDAWN_BUILD_NODE_BINDINGS=OFF \
+  -DDAWN_BUILD_PROTOBUF=OFF \
+  -DDAWN_ENABLE_INSTALL=ON \
+  -DDAWN_BUILD_MONOLITHIC_LIBRARY=STATIC \
+  -DDAWN_BUILD_PROTOBUF=OFF \
+  -DTINT_BUILD_FUZZERS=OFF \
+  -DTINT_BUILD_BENCHMARKS=OFF \
+  -DTINT_BUILD_IR_BINARY=OFF \ 
+  -DTINT_BUILD_CMD_TOOLS=OFF \
+  -DTINT_BUILD_TESTS=OFF \
+  -DTINT_BUILD_SPV_READER=OFF \
+  -DTINT_BUILD_SPV_WRITER=OFF \
+  -DTINT_BUILD_GLSL_WRITER=OFF \
+  -DTINT_BUILD_HLSL_WRITER=OFF \
+  -DTINT_BUILD_MSL_WRITER=ON \
+  -DTINT_BUILD_WGSL_READER=ON \
+  -DTINT_BUILD_WGSL_WRITER=ON
+
+cmake --build build_ios_simulator --config Release
+
+libtool -static \
+  -o /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_combined.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a \
+  /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/Release-iphoneos/libdawn_proc.a
+
+find . -name "webgpu.h"
+
+/Users/philippemonteil/RiderProjects/dawn
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/gen/webgpu-headers/webgpu.h
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/gen/webgpu-headers/webgpu.h
+
+find . -name "libdawn_native.a"
+
+/Users/philippemonteil/RiderProjects/dawn
+
+./build_ios_simulator/build/dawn_native.build/Release-iphonesimulator/Objects-normal/arm64/Binary/libdawn_native.a
+./build_ios_simulator/build/dawn_native.build/Release-iphonesimulator/Objects-normal/x86_64/Binary/libdawn_native.a
+
+/Users/philippemonteil/RiderProjects/dawn/build_ios_simulator/src/dawn/native/Release-iphonesimulator/libdawn_native.a
+/Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_native.a
+
