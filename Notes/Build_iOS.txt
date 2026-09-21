@@ -1,6 +1,9 @@
 
 // 21/09/2026 15:59
 
+nm -m libwebgpu_dawn.a | grep -i wgpuCreateInstance
+nm -m Dawn.xcframework/ios-arm64/libdawn_merged.a | grep -E 'external _wgpu(CreateInstance|InstanceRequestAdapter)'
+
 // Reference the native library / iOS
 
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
