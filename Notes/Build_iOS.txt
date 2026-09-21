@@ -4,7 +4,6 @@
 rm -rf /Users/philippemonteil/RiderProjects/dawn/Dawn.xcframeworks/Dawn.iOS.xcframework
 
 rm -rf build_ios_device
-rm -rf build_ios_simulator
 
 cmake -B build_ios_device -G Xcode \
   -DCMAKE_SYSTEM_NAME=iOS \
@@ -56,6 +55,8 @@ libtool -static \
 
 find . -name "libdawn_combined.a" 
 -> /Users/philippemonteil/RiderProjects/dawn/build_ios_device/src/dawn/native/Release-iphoneos/libdawn_combined.a
+
+rm -rf build_ios_simulator
 
 cmake -B build_ios_simulator -G Xcode \
   -DCMAKE_SYSTEM_NAME=iOS \
@@ -135,3 +136,32 @@ xcodebuild -create-xcframework \
   -output /Users/philippemonteil/RiderProjects/dawn/Dawn.xcframeworks/libdawn_proc.iOS.xcframework
 
 find . -name "libdawn_proc.iOS.xcframework"
+
+find . -name "libdawn_*.a"
+
+
+<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios' or '$(TargetFramework)' == 'net9.0-ios'">
+    
+    <!-- 1. Dawn Proc (celle qui générait l'erreur) -->
+    <NativeReference Include="Platforms\iOS\libs\libdawn_proc.a">
+        <Kind>Static</Kind>
+        <SmartLink>True</SmartLink>
+    </NativeReference>
+
+    <!-- 2. Les dépendances de Dawn (Native, Platform, Common) -->
+    <NativeReference Include="Platforms\iOS\libs\libdawn_native.a">
+        <Kind>Static</Kind>
+        <SmartLink>True</SmartLink>
+    </NativeReference>
+
+    <NativeReference Include="Platforms\iOS\libs\libdawn_platform.a">
+        <Kind>Static</Kind>
+        <SmartLink>True</SmartLink>
+    </NativeReference>
+
+    <NativeReference Include="Platforms\iOS\libs\libdawn_common.a">
+        <Kind>Static</Kind>
+        <SmartLink>True</SmartLink>
+    </NativeReference>
+
+</ItemGroup>
