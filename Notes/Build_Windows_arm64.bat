@@ -3,6 +3,9 @@ cd d:\repos\dawn
 
 rmdir /S /Q out\win-arm64
 
+REM génère Dawn.slnx dans \out\win-armdir *.sln64
+REM qui expose diverses configurations, dont MinSizeRel ...
+
 cmake -S . -B out/win-arm64 ^
   -G "Visual Studio 18 2026" ^
   -A ARM64 ^
@@ -21,14 +24,14 @@ cmake -S . -B out/win-arm64 ^
   -DDAWN_BUILD_SAMPLES=OFF ^
   -DDAWN_BUILD_TESTS=OFF ^
   -DTINT_BUILD_TESTS=OFF ^
-  -DTINT_BUILD_CMD_TOOLS=OFF
-  -DDAWN_BUILD_PROTOBUF=OFF ^
+  -DTINT_BUILD_CMD_TOOLS=OFF ^
+  -DDAWN_BUILD_PROTOBUF=OFF
 
 pause
 
 cmake --build out/win-arm64 --config Release --parallel
+cmake --build out/win-arm64 --config MinSizeRel --parallel
 pause
 
-cmake --install out/win-arm64 --config Release --prefix install/win-arm64
-pause
+REM cmake --install out/win-arm64 --config Release --prefix install/win-arm64
 

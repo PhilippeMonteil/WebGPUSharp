@@ -3,6 +3,9 @@ cd d:\repos\dawn
 
 rmdir /S /Q out\win-x64
 
+REM génère Dawn.slnx dans \out\win-x64
+REM qui expose diverses configurations, dont MinSizeRel ...
+
 cmake -S . -B out/win-x64 -G "Visual Studio 18 2026" -A x64 ^
   -DDAWN_FETCH_DEPENDENCIES=ON ^
   -DDAWN_BUILD_MONOLITHIC_LIBRARY=SHARED ^
@@ -25,8 +28,8 @@ cmake -S . -B out/win-x64 -G "Visual Studio 18 2026" -A x64 ^
 pause
 
 cmake --build out/win-x64 --config Release --parallel
+cmake --build out/win-x64 --config MinSizeRel --parallel
 pause
 
-cmake --install out/win-x64 --config Release --prefix install/win-x64
-pause
+REM cmake --install out/win-x64 --config Release --prefix install/win-x64
 

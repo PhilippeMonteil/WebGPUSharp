@@ -161,7 +161,7 @@ find . -name "libdawn_*.a"
 
     <NativeReference Include="Platforms\iOS\libs\libdawn_common.a">
         <Kind>Static</Kind>
-        <SmartLink>True</SmartLink>
+        <SmartLink>True</Sm artLink>
     </NativeReference>
 
 </ItemGroup>
