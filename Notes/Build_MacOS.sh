@@ -10,11 +10,9 @@ clang++ -dynamiclib \
   -install_name @rpath/libwebgpu_dawn.dylib \
   -o libwebgpu_dawn.dylib
 lipo -info libwebgpu_dawn.dylib
-
-
+dyld_info -exports libwebgpu_dawn.dylib
 
 # git clone https://dawn.googlesource.com/dawn
-# git submodule update --init --recursive
 
 cd /Users/philippemonteil/Temp/dawn-20260922.191850
 
