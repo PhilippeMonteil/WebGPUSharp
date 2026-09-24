@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /Users/philippemonteil/Temp/dawn-20260922.191850
+cd /Users/philippemonteil/Temp/dawn-apple.xcframework
 
 cd /Users/philippemonteil/RiderProjects/dawn
 rm -rf build_ios_device_arm64

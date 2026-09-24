@@ -1,5 +1,18 @@
 #!/bin/bash
 
+cd /Users/philippemonteil/Temp
+clang++ -dynamiclib \
+  -arch arm64 -arch x86_64 \
+  -mmacosx-version-min=12.0 \
+  -Wl,-force_load,dawn-apple.xcframework/macos-arm64_x86_64/libwebgpu_dawn.a \
+  -framework Metal -framework QuartzCore -framework Foundation \
+  -framework IOSurface -framework CoreGraphics -framework IOKit \
+  -install_name @rpath/libwebgpu_dawn.dylib \
+  -o libwebgpu_dawn.dylib
+lipo -info libwebgpu_dawn.dylib
+
+
+
 # git clone https://dawn.googlesource.com/dawn
 # git submodule update --init --recursive
 

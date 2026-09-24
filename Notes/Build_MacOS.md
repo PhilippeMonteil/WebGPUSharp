@@ -3,6 +3,19 @@
 
 ## A) sur MacOS, comment produire un fichier .dynlib à partir d'un .xcframework ?
 
+````
+cd /Users/philippemonteil/Temp
+clang++ -dynamiclib \
+  -arch arm64 -arch x86_64 \
+  -mmacosx-version-min=12.0 \
+  -Wl,-force_load,dawn-apple.xcframework/macos-arm64_x86_64/libwebgpu_dawn.a \
+  -framework Metal -framework QuartzCore -framework Foundation \
+  -framework IOSurface -framework CoreGraphics -framework IOKit \
+  -install_name @rpath/libwebgpu_dawn.dylib \
+  -o libwebgpu_dawn.dylib
+lipo -info libwebgpu_dawn.dylib
+````
+
 ### D'abord : inspecter le contenu
 
 Tout dépend de ce que contient le `.xcframework`. Il n'y a pas de conversion universelle.
