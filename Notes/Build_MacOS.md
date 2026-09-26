@@ -1,9 +1,30 @@
 
 # Notes sur MacOS
 
+## Git
+
+````
+git remote -v
+git branch -r
+````
+
+-> https://dawn.googlesource.com/dawn
+-> origin/chromium/8074
+
+git clone https://dawn.googlesource.com/dawn
+cd dawn
+git checkout chromium/8074
+git checkout -b Test_25092026
+git log --oneline
+git branch -D Test_25092026
+
+pwd -> /Users/philippemonteil/Temp/Test/dawn
+
+cd /Users/philippemonteil/Temp/Test/dawn
+
 ## x86_64
 
-cd /Users/philippemonteil/Temp/dawn
+cd /Users/philippemonteil/Temp/Test/dawn
 
 rm -rf dawn_build_x86_64
 
