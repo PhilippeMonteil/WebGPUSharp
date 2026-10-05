@@ -61,7 +61,22 @@
             <Visible>true</Visible>
             <Pack>true</Pack>
         </Content>
-        <!-- Windows ARM64 native library -->
+		<Content Include="runtimes/win-x64/native/d3dcompiler_47.dll" Condition="Exists('runtimes/win-x64/native/d3dcompiler_47.dll')">
+			<PackagePath>runtimes/win-x64/native</PackagePath>
+			<Visible>true</Visible>
+			<Pack>true</Pack>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<Link>d3dcompiler_47.dll</Link>
+		</Content>
+		<Content Include="runtimes/win-x64/native/dxcompiler.dll" Condition="Exists('runtimes/win-x64/native/dxcompiler.dll')">
+			<PackagePath>runtimes/win-x64/native</PackagePath>
+			<Visible>true</Visible>
+			<Pack>true</Pack>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<Link>dxcompiler.dll</Link>
+		</Content>
+
+		<!-- Windows ARM64 native library -->
         <Content Include="runtimes/win-arm64/native/webgpu_dawn.dll" Condition="Exists('runtimes/win-arm64/native/webgpu_dawn.dll')">
             <PackagePath>runtimes/win-arm64/native</PackagePath>
             <Visible>true</Visible>
