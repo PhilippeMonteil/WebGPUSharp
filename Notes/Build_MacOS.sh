@@ -1,25 +1,8 @@
 #!/bin/bash
 
-cd /Users/philippemonteil/Temp
-clang++ -dynamiclib \
-  -arch arm64 -arch x86_64 \
-  -mmacosx-version-min=12.0 \
-  -Wl,-force_load,dawn-apple.xcframework/macos-arm64_x86_64/libwebgpu_dawn.a \
-  -framework Metal -framework QuartzCore -framework Foundation \
-  -framework IOSurface -framework CoreGraphics -framework IOKit \
-  -install_name @rpath/libwebgpu_dawn.dylib \
-  -o libwebgpu_dawn.dylib
-lipo -info libwebgpu_dawn.dylib
-dyld_info -exports libwebgpu_dawn.dylib
-
-# git clone https://dawn.googlesource.com/dawn
-
-cd /Users/philippemonteil/Temp/dawn-20260922.191850
-
-cd /Users/philippemonteil/RiderProjects/dawn
-rm -rf build_ios_device_arm64
-rm -rf build_ios_simulator_x86_64
-rm -rf build_ios_simulator_arm64
+# répertoires destination :
+# /Users/philippemonteil/RiderProjects/Numicite/SDK/7.0/Numicite.SDK.7.0/Submodules/WebGPUSharp/runtimes/osx-arm64/native
+# /Users/philippemonteil/RiderProjects/Numicite/SDK/7.0/Numicite.SDK.7.0/Submodules/WebGPUSharp/runtimes/osx-x64/native
 
 #
 # device arm64
@@ -66,10 +49,7 @@ cmake -B build_macos_arm64 -G Xcode \
   -DTINT_BUILD_WGSL_READER=OFF \
   -DTINT_BUILD_WGSL_WRITER=OFF
 
-cmake --build build_macos_arm64 --target webgpu_dawn --config Release --parallel
-
-
-
+cmake --build build_macos_arm64 --target webgpu_dawn --config Release --parallel 8
 
 rm -rf build_macos_x86_64
 
@@ -110,4 +90,4 @@ cmake -B build_macos_x86_64 -G Xcode \
   -DTINT_BUILD_WGSL_READER=OFF \
   -DTINT_BUILD_WGSL_WRITER=OFF
 
-cmake --build build_macos_x86_64 --target webgpu_dawn --config Release --parallel
+cmake --build build_macos_x86_64 --target webgpu_dawn --config Release --parallel 8

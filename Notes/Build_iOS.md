@@ -3,6 +3,8 @@
 
 ## Shell de compilation
 
+lancement : './Build_iOS.sh'
+
 ````
 #!/bin/bash
 
