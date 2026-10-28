@@ -5,6 +5,7 @@ REM doit contenir \prebuilt\windows-x86_64\bin\ninja.exe : cf CMAKE_MAKE_PROGRAM
 set NDK=C:\Android\android-ndk-r30-windows\android-ndk-r30
 
 REM ANDROID_ABI=arm64-v8a;x86_64
+REM DDAWN_ENABLE_OPENGLES et DTINT_BUILD_GLSL_WRITER doivent être activés ensemble
 
 rmdir /S /Q out\android-arm64
 
@@ -13,11 +14,13 @@ cmake -S . -B out\android-arm64 -G Ninja ^
   -DCMAKE_MAKE_PROGRAM=%NDK%\prebuilt\windows-x86_64\bin\ninja.exe ^
   -DANDROID_ABI=arm64-v8a ^
   -DANDROID_PLATFORM=android-28 ^
+  -DDAWN_FETCH_DEPENDENCIES=ON ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_VISIBILITY_INLINES_HIDDEN=ON ^
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=MinSizeRel ^
   -DDAWN_ENABLE_VULKAN=ON ^
-  -DDAWN_ENABLE_OPENGLES=OFF ^
+  -DDAWN_ENABLE_OPENGLES=ON ^
+  -DTINT_BUILD_GLSL_WRITER=ON ^
   -DDAWN_ENABLE_D3D11=OFF ^
   -DDAWN_ENABLE_D3D12=OFF ^
   -DDAWN_ENABLE_METAL=OFF ^
@@ -33,12 +36,11 @@ cmake -S . -B out\android-arm64 -G Ninja ^
   -DTINT_BUILD_SPV_READER=OFF ^
   -DTINT_BUILD_IR_BINARY=OFF ^
   -DTINT_BUILD_GLSL_VALIDATOR=OFF ^
-  -DTINT_BUILD_GLSL_WRITER=OFF ^
   -DTINT_BUILD_GLSL_READER=OFF ^
   -DDAWN_BUILD_MONOLITHIC_LIBRARY=SHARED ^
   -DDAWN_BUILD_PROTOBUF=OFF
   
-cmake --build out\android-arm64
+cmake --build out\android-arm64 --config Release --parallel 8
 
 pause
 d:
