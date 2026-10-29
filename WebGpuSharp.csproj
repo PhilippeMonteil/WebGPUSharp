@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -42,7 +43,7 @@
         <_WebGpuSharp_NativeLibName Condition="'$(_WebGpuSharp_NativeRuntime)' == 'linux-arm64'">webgpu_dawn.so</_WebGpuSharp_NativeLibName>
         <!-- Package Information -->
         <PackageId>WebGPUSharp</PackageId>
-        <Version>0.9.102</Version>
+        <Version>0.9.200</Version>
         <Authors>PhM</Authors>
         <Description>A C# wrapper for WebGPU</Description>
         <PackageTags>webgpu;graphics;gpu</PackageTags>
@@ -54,6 +55,7 @@
         <!-- Supported Runtime Identifiers -->
         <RuntimeIdentifiers Condition="'$(RuntimeIdentifier)' != 'browser-wasm' and '$(RuntimeIdentifier)' != 'wasi-wasm'">win-x64;win-arm64;osx-x64;osx-arm64;linux-x64;linux-arm64;ios-arm64;iossimulator-arm64;iossimulator-x64</RuntimeIdentifiers>
     </PropertyGroup>
+    
     <ItemGroup>
         <Compile Remove="tests\**\*.cs" />
         <EmbeddedResource Remove="tests\**\*" />
@@ -126,19 +128,19 @@
             <Pack>true</Pack>
         </Content>
 
-        <!-- ios-arm64 native library -->
-        <Content Include="runtimes/ios-arm64/native/webgpu_dawn.a" Condition="Exists('runtimes/ios-arm64/native/webgpu_dawn.a')">
-            <PackagePath>runtimes/ios-arm64/native</PackagePath>
-            <Visible>true</Visible>
-            <Pack>true</Pack>
-        </Content>
+<!--        &lt;!&ndash; ios-arm64 native library &ndash;&gt;-->
+<!--        <Content Include="runtimes/ios-arm64/native/webgpu_dawn.a" Condition="Exists('runtimes/ios-arm64/native/webgpu_dawn.a')">-->
+<!--            <PackagePath>runtimes/ios-arm64/native</PackagePath>-->
+<!--            <Visible>true</Visible>-->
+<!--            <Pack>true</Pack>-->
+<!--        </Content>-->
 
-        <!-- iossimulator-x64 native library -->
-        <Content Include="runtimes\iossimulator-x64\native\webgpu_dawn.a" Condition="Exists('runtimes/iossimulator-x64/native/webgpu_dawn.a')">
-            <PackagePath>runtimes/iossimulator-x64/native</PackagePath>
-            <Visible>true</Visible>
-            <Pack>true</Pack>
-        </Content>
+<!--        &lt;!&ndash; iossimulator-x64 native library &ndash;&gt;-->
+<!--        <Content Include="runtimes\iossimulator-x64\native\webgpu_dawn.a" Condition="Exists('runtimes/iossimulator-x64/native/webgpu_dawn.a')">-->
+<!--            <PackagePath>runtimes/iossimulator-x64/native</PackagePath>-->
+<!--            <Visible>true</Visible>-->
+<!--            <Pack>true</Pack>-->
+<!--        </Content>-->
 
         <!-- Keep the current one for local development -->
         <None Condition="'$(_WebGpuSharp_NativeRuntime)' != ''" Include="runtimes/$(_WebGpuSharp_NativeRuntime)/native/$(_WebGpuSharp_NativeLibName)">
@@ -149,7 +151,17 @@
         </None>
         <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
+
     <ItemGroup>
       <Folder Include="runtimes\android-x64\native\" />
     </ItemGroup>
+    
+    <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+        <NativeReference Include="/Users/philippemonteil/Temp/dawn/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework">
+            <Kind>Framework</Kind>
+            <SmartLink>True</SmartLink>
+            <ForceLoad>True</ForceLoad>
+        </NativeReference>
+    </ItemGroup>
+
 </Project>
