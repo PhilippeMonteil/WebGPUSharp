@@ -8,11 +8,11 @@
 # /Users/philippemonteil/Temp/dawn/build_ios_simulator/src/dawn/native/libwebgpu_dawn.a
 # /Users/philippemonteil/Temp/dawn/build_ios_device_arm64/src/dawn/native/libwebgpu_dawn.a
 
-cd /Users/philippemonteil/Temp/dawn
-
 #
 # device arm64
 #
+
+cd /Users/philippemonteil/Temp/dawn
 
 rm -rf build_ios_device_arm64
 
@@ -41,6 +41,7 @@ cmake --build build_ios_device_arm64 --config Release --target webgpu_dawn --par
 
 # dyld_info -exports ./build_ios_device_arm64/src/dawn/native/libwebgpu_dawn.a
 find . -name "libwebgpu*.a"
+find . -name "webgpu*.a"
 
 # 
 # ios_simulator arm64;x86_64
@@ -72,6 +73,7 @@ cmake -B build_ios_simulator \
 cmake --build build_ios_simulator --config Release --target webgpu_dawn --parallel 8
 
 find . -name "libwebgpu*.a"
+find . -name "webgpu*.a"
 
 # cp -> runtimes
 cp ./build_ios_simulator/src/dawn/native/libwebgpu_dawn.a /Users/philippemonteil/RiderProjects/Numicite/SDK/7.0/Numicite.SDK.7.0/Submodules/WebGPUSharp/runtimes/ios-emulator/native
