@@ -133,7 +133,5 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="runtimes\android-x64\native\" />
-      <Folder Include="runtimes\ios-arm64\native\" />
-      <Folder Include="runtimes\ios-emulator\native\" />
     </ItemGroup>
 </Project>
