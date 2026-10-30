@@ -157,7 +157,7 @@
     </ItemGroup>
     
     <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-        <NativeReference Include="/Users/philippemonteil/Temp/dawn/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework">
+        <NativeReference Include="/Users/philippemonteil/RiderProjects/Numicite/SDK/7.0/Numicite.SDK.7.0/Submodules/WebGPUSharp/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework">
             <Kind>Framework</Kind>
             <SmartLink>True</SmartLink>
             <ForceLoad>True</ForceLoad>
