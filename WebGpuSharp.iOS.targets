@@ -1,0 +1,13 @@
+<Project>
+
+    <ItemGroup>
+        <NativeReference Include="/Users/philippemonteil/Temp/dawn/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework">
+            <Kind>Static</Kind>
+            <ForceLoad>True</ForceLoad>
+            <SmartLink>False</SmartLink>
+            <IsCxx>true</IsCxx>
+            <Frameworks>Foundation UIKit CoreGraphics Metal MetalKit QuartzCore IOSurface</Frameworks>
+        </NativeReference>
+    </ItemGroup>
+
+</Project>

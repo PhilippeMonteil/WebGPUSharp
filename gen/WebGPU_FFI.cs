@@ -1,3 +1,9 @@
+#if  __IOS__
+#warning "__IOS__ ON"
+#else
+#warning "__IOS__ OFF"
+#endif
+
 using System;
 using System.Runtime.InteropServices;
 
@@ -9,6 +15,13 @@ namespace WebGpuSharp.FFI;
 /// </summary>
 public unsafe static partial class WebGPU_FFI
 {
+
+#if  __IOS__
+    private const string webgpu_dawn = "__Internal";
+#else
+    private const string webgpu_dawn = "webgpu_dawn";
+#endif
+
     public const uint TRUE = 1;
     public const uint FALSE = 0;
     /// <summary>
@@ -75,8 +88,6 @@ public unsafe static partial class WebGPU_FFI
     /// is the whole buffer.
     /// </summary>
     public const ulong WHOLE_SIZE = ulong.MaxValue;
-
-    private const string webgpu_dawn = "webgpu_dawn";
 
     /// <summary>
     /// Create a new instance of the WebGPU API. This is the first step in using the API.
