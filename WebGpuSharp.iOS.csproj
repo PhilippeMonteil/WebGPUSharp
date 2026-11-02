@@ -44,12 +44,4 @@
         <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
     </ItemGroup>
 
-<!--    <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">-->
-<!--        <NativeReference Include="/Users/philippemonteil/RiderProjects/Numicite/SDK/7.0/Numicite.SDK.7.0/Submodules/WebGPUSharp/Dawn.xcframeworks/_libwebgpu_dawn.iOS.xcframework">-->
-<!--            <Kind>Framework</Kind>-->
-<!--            <SmartLink>True</SmartLink>-->
-<!--            <ForceLoad>True</ForceLoad>-->
-<!--        </NativeReference>-->
-<!--    </ItemGroup>-->
-
 </Project>
