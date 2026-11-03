@@ -9,7 +9,7 @@
         <IsTrimmable>true</IsTrimmable>
     </PropertyGroup>
 
-    <Import Project="WebGpuSharp.iOS.targets" />
+    <Import Project="WebGpuSharp.iOS.targets"  />
 
     <PropertyGroup>
         <Nullable>enable</Nullable>

@@ -1,7 +1,7 @@
 <Project>
 
     <ItemGroup>
-        <NativeReference Include="/Users/philippemonteil/Temp/dawn/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework">
+        <NativeReference Include="/Users/philippemonteil/Temp/dawn/Dawn.xcframeworks/libwebgpu_dawn.iOS.xcframework" >
             <Kind>Static</Kind>
             <ForceLoad>True</ForceLoad>
             <SmartLink>False</SmartLink>
